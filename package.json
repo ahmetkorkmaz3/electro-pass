@@ -19,6 +19,7 @@
   "homepage": "https://github.com/orcuntuna/electro-pass#readme",
   "dependencies": {
     "electron": "^5.0.2",
+    "jquery": "^3.4.1",
     "tailwindcss": "^1.0.2"
   },
   "devDependencies": {

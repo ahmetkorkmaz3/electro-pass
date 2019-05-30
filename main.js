@@ -2,15 +2,14 @@ const electron = require('electron')
 const url = require("url")
 const path = require("path")
 const fs = require("fs")
-const app = electron.app
-const BrowserWindow = electron.BrowserWindow
+const {app, BrowserWindow, Menu, ipcMain} = electron;
 
 var user_info = {}
 
-fs.readFile("database/login.json", "utf8", function(err, content){
-  if(!err){
+fs.readFile("database/login.json", "utf8", function (err, content) {
+  if (!err) {
     user_info = JSON.parse(content)
-  }else{
+  } else {
     process.exit()
   }
 })
@@ -34,9 +33,7 @@ function createWindow() {
     slashes: true
   }));
 
-  //mainWindow.webContents.openDevTools()
-
-  mainWindow.on('closed', function() {
+  mainWindow.on('closed', function () {
     mainWindow = null
   })
 
@@ -44,14 +41,25 @@ function createWindow() {
 
 app.on('ready', createWindow)
 
-app.on('window-all-closed', function() {
+app.on('window-all-closed', function () {
   if (process.platform !== 'darwin') {
     app.quit()
   }
 })
 
-app.on('activate', function() {
+app.on('activate', function () {
   if (mainWindow === null) {
     createWindow()
   }
 })
+
+
+ipcMain.on("login:check", function(e, get_user_info){
+
+  if(JSON.stringify(get_user_info) === JSON.stringify(user_info)){
+    console.log("dogru");
+  }else{
+    mainWindow.webContents.send("login:error");
+  }
+
+});
