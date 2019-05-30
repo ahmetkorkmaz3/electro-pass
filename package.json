@@ -15,5 +15,8 @@
   "bugs": {
     "url": "https://github.com/orcuntuna/electro-pass/issues"
   },
-  "homepage": "https://github.com/orcuntuna/electro-pass#readme"
+  "homepage": "https://github.com/orcuntuna/electro-pass#readme",
+  "dependencies": {
+    "electron": "^5.0.2"
+  }
 }
