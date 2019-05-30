@@ -17,6 +17,7 @@
   },
   "homepage": "https://github.com/orcuntuna/electro-pass#readme",
   "dependencies": {
-    "electron": "^5.0.2"
+    "electron": "^5.0.2",
+    "tailwindcss": "^1.0.2"
   }
 }
