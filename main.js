@@ -1,9 +1,19 @@
 const electron = require('electron')
 const url = require("url")
 const path = require("path")
+const fs = require("fs")
 const app = electron.app
-
 const BrowserWindow = electron.BrowserWindow
+
+var user_info = {}
+
+fs.readFile("database/login.json", "utf8", function(err, content){
+  if(!err){
+    user_info = JSON.parse(content)
+  }else{
+    process.exit()
+  }
+})
 
 let mainWindow
 
