@@ -21,7 +21,8 @@ function createWindow() {
   mainWindow = new BrowserWindow({
     title: "Electro Pass Reminder",
     width: 800,
-    height: 600,
+    height: 550,
+    icon: path.join(__dirname, "assets/images/icon.png"),
     webPreferences: {
       nodeIntegration: true
     }
