@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="../assets/tailwind.css">
+  </head>
+  <body>
+    <div class="container mx-auto">
+      <div class="flex">
+        <div class="flex-1 h-screen">
+          <div class="w-full max-w-xs h-full flex justify-center items-center">
+            <form id="login-form" class="bg-white rounded px-8 pt-6 pb-8 mb-4">
+              <div class="mb-2">
+                <label class="block text-gray-700 text-sm font-bold mb-2" for="username">
+                  E-Mail
+                </label>
+                <input class="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none" id="email" type="text" placeholder="E-Mail">
+              </div>
+              <div class="mb-6">
+                <label class="block text-gray-700 text-sm font-bold mb-2" for="password">
+                  Password
+                </label>
+                <input class="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none" id="password" type="password" placeholder="Password">
+              </div>
+              <div class="flex items-center justify-between">
+                <button class="bg-blue-500 hover:bg-blue-700 text-white w-full font-bold py-2 px-4 rounded focus:outline-none" type="submit">
+                  Login
+                </button>
+              </div>
+              <div id="error-text" class="mt-3 text-red-700 text-sm italic hidden">Wrong email or password.</div>
+            </form>
+          </div>
+        </div>
+        <div class="flex-1">
+          <img src="../assets/images/wall-login.jpg" class="w-full h-auto">
+        </div>
+      </div>
+    </div>
+
+    <script>
+
+      const electron = require('electron');
+      const {ipcRenderer} = electron;
+
+      const form = document.querySelector("#login-form");
+      form.addEventListener("submit", submitForm);
+      
+      function submitForm(e){
+        e.preventDefault();
+        const user_info = {
+          email: document.querySelector("#email").value,
+          password: document.querySelector("#password").value
+        }
+        ipcRenderer.send("login:check", user_info);
+      }
+
+      ipcRenderer.on('login:error', function(){
+        const error_text = document.querySelector("#error-text");
+        error_text.style.display = "block";
+      });
+
+  </script>
+
+
+  </body>
+</html>

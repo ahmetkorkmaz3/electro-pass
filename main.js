@@ -4,7 +4,7 @@ const path = require("path")
 const fs = require("fs")
 const {app, BrowserWindow, Menu, ipcMain} = electron;
 
-var user_info = {}
+let user_info = {}
 
 fs.readFile("database/login.json", "utf8", function (err, content) {
   if (!err) {
@@ -14,9 +14,34 @@ fs.readFile("database/login.json", "utf8", function (err, content) {
   }
 })
 
+let loginWindow
 let mainWindow
 
-function createWindow() {
+function createLoginWindow() {
+
+  loginWindow = new BrowserWindow({
+    title: "Electro Pass Reminder",
+    width: 800,
+    height: 550,
+    icon: path.join(__dirname, "assets/images/icon.png"),
+    webPreferences: {
+      nodeIntegration: true
+    }
+  })
+
+  loginWindow.loadURL(url.format({
+    pathname: path.join(__dirname, "template/loginWindow.html"),
+    protocol: "file:",
+    slashes: true
+  }));
+
+  loginWindow.on('closed', function () {
+    loginWindow = null
+  })
+
+}
+
+function createMainWindow() {
 
   mainWindow = new BrowserWindow({
     title: "Electro Pass Reminder",
@@ -36,11 +61,12 @@ function createWindow() {
 
   mainWindow.on('closed', function () {
     mainWindow = null
+    app.quit()
   })
 
 }
 
-app.on('ready', createWindow)
+app.on('ready', createLoginWindow)
 
 app.on('window-all-closed', function () {
   if (process.platform !== 'darwin') {
@@ -49,7 +75,7 @@ app.on('window-all-closed', function () {
 })
 
 app.on('activate', function () {
-  if (mainWindow === null) {
+  if (loginWindow === null) {
     createWindow()
   }
 })
@@ -58,9 +84,10 @@ app.on('activate', function () {
 ipcMain.on("login:check", function(e, get_user_info){
 
   if(JSON.stringify(get_user_info) === JSON.stringify(user_info)){
-    console.log("dogru");
+    createMainWindow();
+    loginWindow.hide();
   }else{
-    mainWindow.webContents.send("login:error");
+    loginWindow.webContents.send("login:error");
   }
 
 });
